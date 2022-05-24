@@ -1,0 +1,43 @@
+name: 'Favro updater'
+description: 'Update Favro cards'
+branding:
+  icon: sliders
+  color: purple
+inputs:
+  token:
+    description: 'The Favro API token.'
+    required: true
+  fieldid:
+    description: 'The Favro Field to update.'
+    required: true
+  value:
+    description: 'The value to set in field'
+    required: true
+  display:
+    description: 'The display value'
+    required: true
+  cardid:
+    description: 'The Favro card id'
+    required: true
+  organizationid:
+    description: 'The Favro organization id'
+    required: true
+# outputs:
+#   title:
+#     description: '?'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+  - '-t'
+  - ${{ inputs.token }}
+  - '-f'
+  - ${{ inputs.fieldid }}
+  - '-v'
+  - ${{ inputs.value }}
+  - '-d'
+  - ${{ inputs.display }}
+  - '-c'
+  - ${{ inputs.cardid }}
+  - '-o'
+  - ${{ inputs.organizationid }}
