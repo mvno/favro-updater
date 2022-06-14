@@ -226,7 +226,7 @@ public class Favro
             while (page < pages);
 
             return entities;
-        //}
+        }
         catch (Exception e)
         {
             throw new InvalidOperationException($"{failMessage}", e.InnerException);
