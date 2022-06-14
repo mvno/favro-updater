@@ -36,7 +36,12 @@ public class ActionInputs
 		HelpText = "Card id")]
 	public string CardId { get; set; } = null!;
 
-	[Option('o', "organizationid",
+    [Option('y', "fieldtype",
+        Required = true,
+        HelpText = "Custom field type")]
+    public string FieldType { get; set; } = null!;
+
+    [Option('o', "organizationid",
 		Required = true,
 		HelpText = "Organization id")]
 	public string OrganizationId { get; set; } = null!;

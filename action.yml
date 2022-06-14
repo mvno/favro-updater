@@ -10,12 +10,15 @@ inputs:
   fieldid:
     description: 'The Favro Field to update.'
     required: true
+  fieldtype:
+    description: 'The Favro Field type.'
+    required: true
   value:
     description: 'The value to set in field'
     required: true
   display:
     description: 'The display value'
-    required: true
+    required: false
   cardid:
     description: 'The Favro card id'
     required: true
@@ -35,6 +38,8 @@ runs:
   - ${{ inputs.fieldid }}
   - '-v'
   - ${{ inputs.value }}
+  - '--fieldtype'
+  - ${{ inputs.fieldtype }}
   - '-d'
   - ${{ inputs.display }}
   - '-c'

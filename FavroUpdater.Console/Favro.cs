@@ -165,18 +165,25 @@ public class Favro
             "Unable to archive card name");
     }
 
-    public object GenerateCustomFieldLink(string fieldId, string link, string text) =>
-        new FavroCustomFieldLink
+	public FavroCustomFieldBase GenerateCustomFieldLink(string fieldId, string link, string text) =>
+		new FavroCustomFieldLink
+		{
+			customFieldId = fieldId,
+			link = new FavroCustomFieldLinkObject { url = link, text = text }
+		};
+
+    public FavroCustomFieldBase GenerateCustomFieldText(string fieldId, string text) =>
+        new FavroCustomFieldText
         {
             customFieldId = fieldId,
-            link = new FavroCustomFieldLinkObject { url = link, text = text }
+            value = text
         };
 
     public Task SetCustomFields(string cardId, object[] customFields)
-    {
-        var customFieldsArray = new FavroCustomFields { customFields = customFields };
-        return Put($"{_baseUrl}/cards/{cardId}", customFieldsArray, "Unable to set status");
-    }
+	{
+		var customFieldsArray = new FavroCustomFields { customFields = customFields };
+		return Put($"{_baseUrl}/cards/{cardId}", customFieldsArray, "Unable to set status");
+	}
 
     public async Task<Card> GetCard(string sequentialId) =>
          (await GetPaged<Card>($"{_baseUrl}/cards?cardSequentialId={sequentialId}",
