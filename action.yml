@@ -25,6 +25,9 @@ inputs:
   organizationid:
     description: 'The Favro organization id'
     required: true
+  tag:
+    description: 'The Favro tag to set'
+    required: true
 # outputs:
 #   title:
 #     description: '?'
@@ -46,3 +49,5 @@ runs:
   - ${{ inputs.cardid }}
   - '-o'
   - ${{ inputs.organizationid }}
+  - '-tag'
+  - ${{ inputs.tag }}

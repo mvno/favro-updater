@@ -22,6 +22,12 @@ static async Task DoWork(ActionInputs inputs, ILogger logger)
 {
     var favro = new Favro(inputs.Token, inputs.OrganizationId, logger);
     var card = await favro.GetCard(inputs.CardId);
+
+    if (!string.IsNullOrEmpty(inputs.Tag) && !card.tags.Any(x => x.Equals(inputs.Tag, StringComparison.OrdinalIgnoreCase)))
+    {
+        await favro.AddTagByName(card.cardId, inputs.Tag);
+    }
+
     var field = inputs.FieldType.ToLower() switch
     {
         "link" => favro.GenerateCustomFieldLink(inputs.FieldId, inputs.FieldValue, inputs.FieldDisplay),

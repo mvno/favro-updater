@@ -36,4 +36,9 @@ public class ActionInputs
         Required = true,
         HelpText = "Organization id")]
     public string OrganizationId { get; set; } = null!;
+
+    [Option('a', "tag",
+        Required = false,
+        HelpText = "Tag")]
+    public string Tag { get; set; } = null!;
 }
