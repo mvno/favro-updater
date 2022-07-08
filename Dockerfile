@@ -9,8 +9,8 @@ LABEL com.github.actions.description="A Github action that updates Favro cards"
 LABEL com.github.actions.icon="sliders"
 LABEL com.github.actions.color="purple"
 
-RUN curl https://github.com/mvno/favro-updater/releases/download/v0.0.5/FavroUpdater.Console.0.0.5.zip -O tmp \
-&& unzip tmp/FavroUpdater.Console.0.0.5.zip -d . \
-&& rm tmp/FavroUpdater.Console.0.0.5.zip
+COPY https://github.com/mvno/favro-updater/releases/download/v0.0.5/FavroUpdater.Console.0.0.6.zip tmp/
+RUN unzip tmp/FavroUpdater.Console.0.0.6.zip -d .
+RUN rm tmp/FavroUpdater.Console.0.0.6.zip
 
 ENTRYPOINT [ "dotnet", "/FavroUpdater.Console.dll" ]
