@@ -2,125 +2,123 @@ using System.Text;
 using Polly;
 
 namespace FavroUpdater.Console;
-
+#pragma warning disable IDE1006 
 public class FavroUser
 {
-    public string UserId { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string OrganizationRole { get; set; }
+    public string? UserId { get; set; }
+    public string? Name { get; set; }
+    public string? Email { get; set; }
+    public string? OrganizationRole { get; set; }
 }
 
 public class FavroPagedGet<T>
 {
     public int Page { get; set; }
     public int Pages { get; set; }
-    public string RequestId { get; set; }
-    public List<T> entities { get; set; }
+    public string? RequestId { get; set; }
+    public List<T> entities { get; set; } = new List<T>();
 }
 
 public class FavroTag
 {
-    public string TagId { get; set; }
-    public string Name { get; set; }
+    public string? TagId { get; set; }
+    public string? Name { get; set; }
 }
 
 public class FavroAddTagId
 {
-    public string[] addTagIds { get; set; }
+    public string[] addTagIds { get; set; } = Array.Empty<string>();
 }
 
 public class FavroAddTag
 {
-    public string[] addTags { get; set; }
+    public string[] addTags { get; set; } = Array.Empty<string>();
 }
 
 public class FavroRemoveTagId
 {
-    public string[] removeTagIds { get; set; }
+    public string[] removeTagIds { get; set; } = Array.Empty<string>();
 }
 
 public class FavroAssingUser
 {
-    public string[] addAssignmentIds { get; set; }
+    public string[] addAssignmentIds { get; set; } = Array.Empty<string>();
 }
 
 public class FavroComment
 {
-    public string comment { get; set; }
-    public string cardCommonId { get; set; }
+    public string? comment { get; set; }
+    public string? cardCommonId { get; set; }
 }
 
 public class FavroSetName
 {
-    public string name { get; set; }
+    public string? name { get; set; }
 }
 
 public class FavroArchive
 {
-    public bool archive { get; set; }
+    public bool? archive { get; set; }
 }
 
 public class FavroMove
 {
-    public string widgetCommonId { get; set; }
-    public string columnId { get; set; }
-    public string laneId { get; set; }
-    public string dragMode { get; set; } = "move";
+    public string? widgetCommonId { get; set; }
+    public string? columnId { get; set; }
+    public string? laneId { get; set; }
+    public string? dragMode { get; set; } = "move";
 }
 
 public class FavroCustomFieldLinkObject
 {
-    public string url { get; set; }
-    public string text { get; set; }
+    public string? url { get; set; }
+    public string? text { get; set; }
 }
 
 public class FavroCustomFieldLink : FavroCustomFieldBase
 {
-    public string customFieldId { get; set; }
-    public FavroCustomFieldLinkObject link { get; set; }
+    public FavroCustomFieldLinkObject? link { get; set; }
 }
 
 public class FavroCustomFieldText : FavroCustomFieldBase
 {
-    public string value { get; set; }
+    public string? value { get; set; }
 }
 
 public abstract class FavroCustomFieldBase
 {
-    public string customFieldId { get; set; }
+    public string? customFieldId { get; set; }
 }
 
 public class FavroCustomFieldColor : FavroCustomFieldBase
 {
-    public string customFieldId { get; set; }
-    public string color { get; set; }
+    public string? color { get; set; }
 }
 
 public class FavroCustomFields
 {
-    public object[] customFields { get; set; }
+    public object[] customFields { get; set; } = Array.Empty<object>();
 }
 
 public class FavroCreateCard
 {
-    public string name { get; set; }
-    public string widgetCommonId { get; set; }
+    public string? name { get; set; }
+    public string? widgetCommonId { get; set; }
 }
+
+#pragma warning restore IDE006
 
 public class Favro
 {
-    private const string _baseUrl = "https://favro.com/api/v1";
-    private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private const string BaseUrl = "https://favro.com/api/v1";
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
     private readonly string _token;
-    private readonly ILogger _log;
     private readonly Dictionary<string, string> _headers;
     private readonly Policy _retryPolicy = Policy.Handle<HttpRequestException>().Retry(2);
 
-    public Favro(string token, string organizationId, ILogger log)
+    public Favro(string token, string organizationId)
     {
         _token = token;
-        _log = log;
         _headers = new Dictionary<string, string>
                 {
                     { "User-Agent", "pipeline" },
@@ -129,39 +127,39 @@ public class Favro
                 };
     }
 
-    public Task AddTag(string cardId, string tagId) => Put($"{_baseUrl}/cards/{cardId}",
+    public Task AddTag(string cardId, string tagId) => Put($"{BaseUrl}/cards/{cardId}",
         new FavroAddTagId { addTagIds = new[] { tagId } }, "Unable to add tag to card");
 
-    public Task AddTagByName(string cardId, string tagName) => Put($"{_baseUrl}/cards/{cardId}",
+    public Task AddTagByName(string cardId, string tagName) => Put($"{BaseUrl}/cards/{cardId}",
         new FavroAddTag { addTags = new[] { tagName } }, "Unable to add tag to card");
 
-    public Task RemoveTag(string cardId, string tagId) => Put($"{_baseUrl}/cards/{cardId}",
+    public Task RemoveTag(string cardId, string tagId) => Put($"{BaseUrl}/cards/{cardId}",
         new FavroRemoveTagId { removeTagIds = new[] { tagId } }, "Unable to remove tag to card");
 
-    public Task AssignUser(string cardId, string userId) => Put($"{_baseUrl}/cards/{cardId}",
+    public Task AssignUser(string cardId, string userId) => Put($"{BaseUrl}/cards/{cardId}",
         new FavroAssingUser { addAssignmentIds = new[] { userId } }, "Unable to add user to card");
 
     public Task Comment(string cardId, string comment)
     {
-        return Post($"{_baseUrl}/comments", new FavroComment { cardCommonId = cardId, comment = comment },
+        return Post($"{BaseUrl}/comments", new FavroComment { cardCommonId = cardId, comment = comment },
             "Unable to comment on card");
     }
 
     public Task Move(string boardId, string columnId, string laneId, string cardId)
     {
-        return Put($"{_baseUrl}/cards/{cardId}",
+        return Put($"{BaseUrl}/cards/{cardId}",
             new FavroMove { widgetCommonId = boardId, columnId = columnId, laneId = laneId },
             "Unable to move card");
     }
 
     public Task SetName(string cardId, string name)
     {
-        return Put($"{_baseUrl}/cards/{cardId}", new FavroSetName { name = name }, "Unable to set card name");
+        return Put($"{BaseUrl}/cards/{cardId}", new FavroSetName { name = name }, "Unable to set card name");
     }
 
     public Task Archive(string cardId)
     {
-        return Put($"{_baseUrl}/cards/{cardId}", new FavroArchive { archive = true },
+        return Put($"{BaseUrl}/cards/{cardId}", new FavroArchive { archive = true },
             "Unable to archive card name");
     }
 
@@ -182,13 +180,12 @@ public class Favro
     public Task SetCustomFields(string cardId, object[] customFields)
     {
         var customFieldsArray = new FavroCustomFields { customFields = customFields };
-        return Put($"{_baseUrl}/cards/{cardId}", customFieldsArray, "Unable to set status");
+        return Put($"{BaseUrl}/cards/{cardId}", customFieldsArray, "Unable to set status");
     }
 
     public async Task<Card> GetCard(string sequentialId) =>
-         (await GetPaged<Card>($"{_baseUrl}/cards?cardSequentialId={sequentialId}",
+         (await GetPaged<Card>($"{BaseUrl}/cards?cardSequentialId={sequentialId}",
             $"Unable to fetch card {sequentialId}"))[0];
-
 
     private Task<T> Get<T>(string url, string failMessage)
     {
@@ -258,7 +255,7 @@ public class Favro
                     throw new Exception(content);
                 }
 
-                return JsonSerializer.Deserialize<T>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<T>(content, JsonOptions);
             });
         }
         catch (Exception e)
@@ -300,7 +297,7 @@ public class Favro
                     throw new Exception(content);
                 }
 
-                return JsonSerializer.Deserialize<U>(content, _jsonOptions);
+                return JsonSerializer.Deserialize<U>(content, JsonOptions);
             });
         }
         catch (Exception e)
@@ -311,6 +308,6 @@ public class Favro
 
     private bool IsSuccessStatusCode(int statusCode)
     {
-        return ((int)statusCode >= 200) && ((int)statusCode <= 299);
+        return statusCode is >= 200 and <= 299;
     }
 }

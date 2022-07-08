@@ -1,3 +1,5 @@
+using System.Globalization;
+
 using var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder
@@ -16,11 +18,11 @@ parser.WithNotParsed(
         Environment.Exit(2);
     });
 
-await parser.WithParsedAsync(options => DoWork(options, logger));
+await parser.WithParsedAsync(options => DoWork(options));
 
-static async Task DoWork(ActionInputs inputs, ILogger logger)
+static async Task DoWork(ActionInputs inputs)
 {
-    var favro = new Favro(inputs.Token, inputs.OrganizationId, logger);
+    var favro = new Favro(inputs.Token, inputs.OrganizationId);
     var card = await favro.GetCard(inputs.CardId);
 
     if (!string.IsNullOrEmpty(inputs.Tag) && !card.tags.Any(x => x.Equals(inputs.Tag, StringComparison.OrdinalIgnoreCase)))
@@ -28,7 +30,7 @@ static async Task DoWork(ActionInputs inputs, ILogger logger)
         await favro.AddTagByName(card.cardId, inputs.Tag);
     }
 
-    var field = inputs.FieldType.ToLower() switch
+    var field = inputs.FieldType.ToLower(CultureInfo.InvariantCulture) switch
     {
         "link" => favro.GenerateCustomFieldLink(inputs.FieldId, inputs.FieldValue, inputs.FieldDisplay),
         "text" => favro.GenerateCustomFieldText(inputs.FieldId, inputs.FieldValue),
