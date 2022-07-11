@@ -42,6 +42,11 @@ public class ActionInputs
         HelpText = "Add tag")]
     public string AddTag { get; set; } = null!;
 
+    [Option('i', "tagid",
+        Required = false,
+        HelpText = "Add tag with id")]
+    public string AddTagId { get; set; } = null!;
+
     [Option('r', "removetagid",
         Required = false,
         HelpText = "Remove tag with id")]

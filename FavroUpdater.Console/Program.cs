@@ -30,6 +30,11 @@ static async Task DoWork(ActionInputs inputs)
         await favro.AddTagByName(card.cardId, inputs.AddTag);
     }
 
+    if (!string.IsNullOrEmpty(inputs.AddTagId))
+    {
+        await favro.AddTag(card.cardId, inputs.AddTagId);
+    }
+
     if (!string.IsNullOrEmpty(inputs.RemoveTagId))
     {
         try
