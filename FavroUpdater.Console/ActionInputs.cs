@@ -42,7 +42,7 @@ public class ActionInputs
         HelpText = "Add tag")]
     public string AddTag { get; set; } = null!;
 
-    [Option('i', "tagid",
+    [Option('i', "addtagid",
         Required = false,
         HelpText = "Add tag with id")]
     public string AddTagId { get; set; } = null!;

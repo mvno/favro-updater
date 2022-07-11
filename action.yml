@@ -9,13 +9,13 @@ inputs:
     required: true
   fieldid:
     description: 'The Favro Field to update.'
-    required: true
+    required: false
   fieldtype:
     description: 'The Favro Field type.'
-    required: true
+    required: false
   value:
     description: 'The value to set in field'
-    required: true
+    required: false
   display:
     description: 'The display value'
     required: false
@@ -27,7 +27,13 @@ inputs:
     required: true
   tag:
     description: 'The Favro tag to set'
-    required: true
+    required: false
+  addtagid:
+    description: 'The Favro tag id to set'
+    required: false
+  removetagid:
+    description: 'The Favro tag id to remove'
+    required: false
 # outputs:
 #   title:
 #     description: '?'
@@ -51,3 +57,7 @@ runs:
   - ${{ inputs.organizationid }}
   - '--tag'
   - ${{ inputs.tag }}
+  - '--addtagid'
+  - ${{ inputs.addtagid }}
+  - '--removetagid'
+  - ${{ inputs.removetagid }}
